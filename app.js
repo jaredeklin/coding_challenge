@@ -61,6 +61,33 @@ const numberToWord = (num) => {
   const splitNumber = num.toString().split('.')
 
   const fraction = decimal(splitNumber[1])
+
+  const splitInt = [...number[0]]
+  let hundred = []
+  let thousand = []
+  let million = []
+  let billion = []
+  let count = 0
+
+  for (let i = splitInt.length - 1; i >= 0; i--) {
+
+    if (count < 3) {
+      hundred.push(splitInt[i])
+    } else if (count < 6) {
+      thousand.push(splitInt[i])
+    } else if (count < 9) {
+      million.push(splitInt[i])
+    } else if (count < 12) {
+      billion.push(splitInt[i])
+    }
+
+    count++
+  }
+
+  hundred = hundred.reverse()
+  thousand = thousand.reverse()
+  million = million.reverse()
+  billion = billion.reverse()
 }
 
 
