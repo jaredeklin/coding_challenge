@@ -41,6 +41,14 @@ const medium = [
   'Ninty'
 ]
 
+const large = [
+  '', 
+  'Hundred', 
+  'Thousand', 
+  'Million', 
+  'Billion'
+]
+
 
 const numberToWord = (num) => {
 
