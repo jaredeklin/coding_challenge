@@ -3,3 +3,9 @@
 * 
 * Please refer to the README.md for challenge questions and complete your challenge below.
 */
+
+
+
+const numberToWord = (num) => {
+  
+}
