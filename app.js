@@ -68,6 +68,7 @@ const numberToWord = (num) => {
   let million = []
   let billion = []
   let count = 0
+  let wordsArray = []
 
   for (let i = splitInt.length - 1; i >= 0; i--) {
 
@@ -89,7 +90,8 @@ const numberToWord = (num) => {
   // million = million.reverse()
   // billion = billion.reverse()
 
-  const words = hundred.map((x, hundredIndex) => {
+
+  hundred.forEach((x, hundredIndex) => {
  
     let match;
 
@@ -110,18 +112,35 @@ const numberToWord = (num) => {
       }
     
     } else {
-      match = medium.find((tens, tensIndex) => {
+
+      if (x < 2) {
+        const teens = hundred.slice(0, 2).reverse().join('')
+      
+        match = small.find((digit, digitIndex) => {
         
-        if (x == tensIndex) {
-          return tens
-        }
-      })
+          if (teens == digitIndex) {
+            return digit
+          }
+        })
+
+        wordsArray[0] = ''
+
+      } else {
+
+        match = medium.find((tens, tensIndex) => {
+
+          if (x == tensIndex) {
+            return tens
+          }
+        })
+      }
     }
-    return match
-    })
+
+    wordsArray = [...wordsArray, match]
+  })
 
 
-  console.log(words.reverse().join(' '))
+  console.log(wordsArray.reverse().join(' '))
 }
 
 
