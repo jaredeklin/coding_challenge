@@ -25,8 +25,20 @@ const small = [
   'Sixteen',
   'Seventeen',
   'Eighteen',
-  'Nineteen',
-  'Twenty'
+  'Nineteen'
+]
+
+const medium = [
+  '',
+  '',
+  'Twenty',
+  'Thirty',
+  'Forty',
+  'Fifty',
+  'Sixty',
+  'Seventy',
+  'Eighty',
+  'Ninty'
 ]
 
 
