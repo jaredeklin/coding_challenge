@@ -49,7 +49,19 @@ const large = [
   'Billion'
 ]
 
+const decimal = (num) => {
+  if (num === undefined) {
+    return ''
+  } else {
+    return `and ${num}/100`
+  }
+}
 
 const numberToWord = (num) => {
+  const splitNumber = num.toString().split('.')
 
+  const fraction = decimal(splitNumber[1])
 }
+
+
+
