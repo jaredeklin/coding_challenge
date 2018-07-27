@@ -84,10 +84,44 @@ const numberToWord = (num) => {
     count++
   }
 
-  hundred = hundred.reverse()
-  thousand = thousand.reverse()
-  million = million.reverse()
-  billion = billion.reverse()
+  // hundred = hundred.reverse()
+  // thousand = thousand.reverse()
+  // million = million.reverse()
+  // billion = billion.reverse()
+
+  const words = hundred.map((x, hundredIndex) => {
+ 
+    let match;
+
+    if (hundredIndex === 0 || hundredIndex === 2) {
+      match = small.find((integer, index) => {
+     
+        if (x == index) {
+          if (integer === undefined) {
+            return ''
+          } else {
+            return integer
+          }     
+        }
+      })
+
+      if (hundredIndex === 2) {
+        match = `${match} Hundred`
+      }
+    
+    } else {
+      match = medium.find((tens, tensIndex) => {
+        
+        if (x == tensIndex) {
+          return tens
+        }
+      })
+    }
+    return match
+    })
+
+
+  console.log(words.reverse().join(' '))
 }
 
 
