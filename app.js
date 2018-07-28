@@ -57,45 +57,16 @@ const decimal = (num) => {
   }
 }
 
-const numberToWord = (num) => {
-  const splitNumber = num.toString().split('.')
+const getWords = (values, scale) => {
 
-  const fraction = decimal(splitNumber[1])
-
-  const splitInt = [...number[0]]
-  let hundred = []
-  let thousand = []
-  let million = []
-  let billion = []
-  let count = 0
   let wordsArray = []
-
-  for (let i = splitInt.length - 1; i >= 0; i--) {
-
-    if (count < 3) {
-      hundred.push(splitInt[i])
-    } else if (count < 6) {
-      thousand.push(splitInt[i])
-    } else if (count < 9) {
-      million.push(splitInt[i])
-    } else if (count < 12) {
-      billion.push(splitInt[i])
-    }
-
-    count++
-  }
-
-  // hundred = hundred.reverse()
-  // thousand = thousand.reverse()
-  // million = million.reverse()
-  // billion = billion.reverse()
-
-
-  hundred.forEach((x, hundredIndex) => {
+  
+  if (values.length) {
+    values.forEach((x, valueIndex) => {
  
     let match;
 
-    if (hundredIndex === 0 || hundredIndex === 2) {
+    if (valueIndex === 0 || valueIndex === 2) {
       match = small.find((integer, index) => {
      
         if (x == index) {
@@ -107,14 +78,14 @@ const numberToWord = (num) => {
         }
       })
 
-      if (hundredIndex === 2) {
+      if (valueIndex === 2) {
         match = `${match} Hundred`
       }
     
     } else {
 
       if (x < 2) {
-        const teens = hundred.slice(0, 2).reverse().join('')
+        const teens = values.slice(0, 2).reverse().join('')
       
         match = small.find((digit, digitIndex) => {
         
@@ -135,13 +106,55 @@ const numberToWord = (num) => {
         })
       }
     }
-
     wordsArray = [...wordsArray, match]
   })
 
+  if (scale !== 'Hundred') {
+    wordsArray = [scale, ...wordsArray]
+  }
 
-  console.log(wordsArray.reverse().join(' '))
+  }
+
+  return wordsArray.reverse()
 }
 
 
+const numberToWord = (num) => {
 
+  const splitNumber = num.toString().split('.')
+  const splitInt = [...splitNumber[0]]
+  const fraction = decimal(splitNumber[1])
+
+  let hundred = []
+  let thousand = []
+  let million = []
+  let billion = []
+  let count = 0
+
+  for (let i = splitInt.length - 1; i >= 0; i--) {
+
+    if (count < 3) {
+      hundred.push(splitInt[i])
+    } else if (count < 6) {
+      thousand.push(splitInt[i])
+    } else if (count < 9) {
+      million.push(splitInt[i])
+    } else if (count < 12)  {
+      billion.push(splitInt[i])
+    }
+  
+    count++
+  }
+
+  const bil = getWords(billion, 'Billion')
+  const mil = getWords(million, 'Million')
+  const thou = getWords(thousand, 'Thousand')
+  const hund = getWords(hundred, 'Hundred')
+
+  const combineValues = [...bil, ...mil, ...thou, ...hund, fraction, 'dollars']
+  const joinWords = combineValues.filter(space => space).join(' ')
+
+  return joinWords
+}
+
+numberToWord(1052343423.45)
