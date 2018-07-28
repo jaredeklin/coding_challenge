@@ -71,7 +71,11 @@ const getWords = (values, scale) => {
         })
 
         if (valueIndex === 2) {
-          match = `${match} Hundred`
+          if (match !== undefined) {
+            match = `${match} Hundred`
+          } else {
+            match = ''
+          }
         }
       
       } else {
@@ -102,7 +106,11 @@ const getWords = (values, scale) => {
     })
 
     if (scale !== 'Hundred') {
-      wordsArray = [scale, ...wordsArray]
+      const check = wordsArray.filter(word => word)
+      
+      if (check.length) {
+        wordsArray = [scale, ...wordsArray]
+      }
     }
   }
 
@@ -145,7 +153,8 @@ const numberToWord = (num) => {
   const combineValues = [...bil, ...mil, ...thou, ...hund, fraction, 'Dollars']
   const joinWords = combineValues.filter(space => space).join(' ')
 
+  console.log(joinWords)
   return joinWords
 }
 
-numberToWord(152343423.45)
+numberToWord(127230000023.34)
