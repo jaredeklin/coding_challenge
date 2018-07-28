@@ -41,14 +41,6 @@ const medium = [
   'Ninty'
 ]
 
-const large = [
-  '', 
-  'Hundred', 
-  'Thousand', 
-  'Million', 
-  'Billion'
-]
-
 const decimal = (num) => {
   if (num === undefined) {
     return ''
@@ -60,59 +52,58 @@ const decimal = (num) => {
 const getWords = (values, scale) => {
 
   let wordsArray = []
-  
+
   if (values.length) {
     values.forEach((x, valueIndex) => {
  
-    let match;
+      let match;
 
-    if (valueIndex === 0 || valueIndex === 2) {
-      match = small.find((integer, index) => {
-     
-        if (x == index) {
-          if (integer === undefined) {
-            return ''
-          } else {
-            return integer
-          }     
-        }
-      })
-
-      if (valueIndex === 2) {
-        match = `${match} Hundred`
-      }
-    
-    } else {
-
-      if (x < 2) {
-        const teens = values.slice(0, 2).reverse().join('')
-      
-        match = small.find((digit, digitIndex) => {
-        
-          if (teens == digitIndex) {
-            return digit
+      if (valueIndex === 0 || valueIndex === 2) {
+        match = small.find((integer, index) => {
+       
+          if (x == index) {
+            if (integer === undefined) {
+              return ''
+            } else {
+              return integer
+            }     
           }
         })
 
-        wordsArray[0] = ''
-
+        if (valueIndex === 2) {
+          match = `${match} Hundred`
+        }
+      
       } else {
 
-        match = medium.find((tens, tensIndex) => {
+        if (x < 2) {
+          const teens = values.slice(0, 2).reverse().join('')
+        
+          match = small.find((digit, digitIndex) => {
+          
+            if (teens == digitIndex) {
+              return digit
+            }
+          })
 
-          if (x == tensIndex) {
-            return tens
-          }
-        })
+          wordsArray[0] = ''
+
+        } else {
+
+          match = medium.find((tens, tensIndex) => {
+
+            if (x == tensIndex) {
+              return tens
+            }
+          })
+        }
       }
+      wordsArray = [...wordsArray, match]
+    })
+
+    if (scale !== 'Hundred') {
+      wordsArray = [scale, ...wordsArray]
     }
-    wordsArray = [...wordsArray, match]
-  })
-
-  if (scale !== 'Hundred') {
-    wordsArray = [scale, ...wordsArray]
-  }
-
   }
 
   return wordsArray.reverse()
@@ -151,10 +142,10 @@ const numberToWord = (num) => {
   const thou = getWords(thousand, 'Thousand')
   const hund = getWords(hundred, 'Hundred')
 
-  const combineValues = [...bil, ...mil, ...thou, ...hund, fraction, 'dollars']
+  const combineValues = [...bil, ...mil, ...thou, ...hund, fraction, 'Dollars']
   const joinWords = combineValues.filter(space => space).join(' ')
 
   return joinWords
 }
 
-numberToWord(1052343423.45)
+numberToWord(152343423.45)
