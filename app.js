@@ -42,10 +42,20 @@ const medium = [
 ]
 
 const decimal = (num) => {
+
   if (num === undefined) {
+    
     return ''
   } else {
-    return `and ${num}/100`
+    let denominator = 1;
+
+    if (num.length) {
+      for (let i = 0; i < num.length; i++) {
+        denominator = denominator + '0'
+      }   
+    }
+
+    return `and ${num}/${parseInt(denominator)}`
   }
 }
 
@@ -54,14 +64,14 @@ const getWords = (values, scale) => {
   let wordsArray = []
 
   if (values.length) {
-    values.forEach((x, valueIndex) => {
+    values.forEach((value, valueIndex) => {
  
       let match;
 
       if (valueIndex === 0 || valueIndex === 2) {
         match = small.find((integer, index) => {
        
-          if (x == index) {
+          if (value == index) {
             if (integer === undefined) {
               return ''
             } else {
@@ -80,7 +90,7 @@ const getWords = (values, scale) => {
       
       } else {
 
-        if (x < 2) {
+        if (value < 2) {
           const teens = values.slice(0, 2).reverse().join('')
         
           match = small.find((digit, digitIndex) => {
@@ -96,7 +106,7 @@ const getWords = (values, scale) => {
 
           match = medium.find((tens, tensIndex) => {
 
-            if (x == tensIndex) {
+            if (value == tensIndex) {
               return tens
             }
           })
