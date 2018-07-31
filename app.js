@@ -158,3 +158,7 @@ const numberToWord = (num) => {
 }
 
 numberToWord(127230000023.34)
+
+
+module.exports = numberToWord
+
