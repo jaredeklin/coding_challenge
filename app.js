@@ -120,6 +120,10 @@ const getWords = (values, scale) => {
 
 const numberToWord = (num) => {
 
+  if (typeof(num) !== 'number') {
+    return 'Invalid input'
+  }
+
   const splitNumber = num.toString().split('.')
   const splitInt = [...splitNumber[0]]
   const fraction = decimal(splitNumber[1])
@@ -157,7 +161,7 @@ const numberToWord = (num) => {
   return joinWords
 }
 
-numberToWord(127230000023.34)
+// numberToWord('123tx3')
 
 
 module.exports = numberToWord
