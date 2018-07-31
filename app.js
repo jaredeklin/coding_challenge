@@ -152,16 +152,19 @@ const numberToWord = (num) => {
   const bil = getWords(billion, 'Billion')
   const mil = getWords(million, 'Million')
   const thou = getWords(thousand, 'Thousand')
-  const hund = getWords(hundred, 'Hundred')
+  let hund = getWords(hundred, 'Hundred')
 
-  const combineValues = [...bil, ...mil, ...thou, ...hund, fraction, 'Dollars']
+  if (hund[0] === undefined) {
+    hund[0] = 'Zero'
+  }
+
+  const combineValues = [...bil, ...mil, ...thou, ...hund, fraction]
   const joinWords = combineValues.filter(space => space).join(' ')
 
-  console.log(joinWords)
-  return joinWords
+  return joinWords + ' Dollars'
 }
 
-// numberToWord('123tx3')
+// numberToWord(0)
 
 
 module.exports = numberToWord
