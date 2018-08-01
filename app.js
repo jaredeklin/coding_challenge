@@ -135,6 +135,13 @@ const getWords = (values, scale) => {
   return wordsArray.reverse()
 }
 
+const buildPhrase = (negative, words, fraction) => {
+  const combineValues = [negative, ...words, fraction]
+  const joinWords = combineValues.filter(space => space).join(' ')
+
+  return joinWords + ' Dollars'
+}
+
 
 const numberToWord = (num) => {
 
@@ -144,29 +151,32 @@ const numberToWord = (num) => {
 
   let negative = ''
   const splitNumber = num.toString().split('.')
+  const fraction = decimal(splitNumber[1])
   let splitInt = [...splitNumber[0]]
-
+  
   if(splitInt[0] === '-') {
     negative = 'Negative'
     splitInt.splice(0, 1)
   }
 
-  const fraction = decimal(splitNumber[1])
-  const digits = [...splitNumber[0]]
-  let reverseDigits = digits.reverse().join('')
-  let chunks = []
-  
+  if(splitInt[0] === '0') {
+    return buildPhrase(negative, ['Zero'], fraction)
+  }
+
+  let reverseDigits = splitInt.reverse().join('')
+  let numberChunks = []
+ 
   while(reverseDigits) {
     if (reverseDigits.length < 3) {
-      chunks.push(reverseDigits)
+      numberChunks.push(reverseDigits)
       break;
     } else {
-      chunks.push(reverseDigits.slice(0, 3)) 
+      numberChunks.push(reverseDigits.slice(0, 3)) 
       reverseDigits = reverseDigits.slice(3)
     }
   }
-
-  const words = chunks.map((chunk, index) => {
+  
+  const words = numberChunks.map((chunk, index) => {
     const scale = large[index]
     const nums = [...chunk]
     const phrase = getWords(nums, scale)
@@ -174,17 +184,10 @@ const numberToWord = (num) => {
     return phrase
   }).reverse()
 
+  const cleanWords = words.reduce((acc, word) => [...acc, ...word], [])
+  const phrase = buildPhrase(negative, cleanWords, fraction)
 
-  let cleanWords = words.reduce((acc, word) => [...acc, ...word], [])
-
-  if (splitInt[0] === "0") {
-    cleanWords[0] = 'Zero'
-  }
-
-  const combineValues = [negative, ...cleanWords, fraction]
-  const joinWords = combineValues.filter(space => space).join(' ')
-  // console.log(joinWords)
-  return joinWords + ' Dollars'
+  return phrase
 }
 
 // numberToWord(34)
