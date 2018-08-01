@@ -41,10 +41,18 @@ const medium = [
   'Ninty'
 ]
 
+const large = [
+  'Hundred',
+  'Thousand',
+  'Million',
+  'Billion',
+  'Trillion'
+]
+
 const decimal = (num) => {
 
   if (num === undefined) {
-    
+
     return ''
   } else {
     let denominator = 1;
@@ -134,48 +142,52 @@ const numberToWord = (num) => {
     return 'Invalid input'
   }
 
+  let negative = ''
   const splitNumber = num.toString().split('.')
-  const splitInt = [...splitNumber[0]]
+  let splitInt = [...splitNumber[0]]
+
+  if(splitInt[0] === '-') {
+    negative = 'Negative'
+    splitInt.splice(0, 1)
+  }
+
   const fraction = decimal(splitNumber[1])
-
-  let hundred = []
-  let thousand = []
-  let million = []
-  let billion = []
-  let count = 0
-
-  for (let i = splitInt.length - 1; i >= 0; i--) {
-
-    if (count < 3) {
-      hundred.push(splitInt[i])
-    } else if (count < 6) {
-      thousand.push(splitInt[i])
-    } else if (count < 9) {
-      million.push(splitInt[i])
-    } else if (count < 12)  {
-      billion.push(splitInt[i])
-    }
+  let chunks = []
+  const digits = [...splitNumber[0]]
+  let reverseDigits = digits.reverse().join('')
   
-    count++
+  while(reverseDigits) {
+    if (reverseDigits.length < 3) {
+      chunks.push(reverseDigits)
+      break;
+    } else {
+      chunks.push(reverseDigits.substr(0, 3)) 
+      reverseDigits = reverseDigits.substr(3)
+    }
   }
 
-  const bil = getWords(billion, 'Billion')
-  const mil = getWords(million, 'Million')
-  const thou = getWords(thousand, 'Thousand')
-  let hund = getWords(hundred, 'Hundred')
+  const words = chunks.map((chunk, index) => {
+    const scale = large[index]
+    const nums = [...chunk]
+    const phrase = getWords(nums, scale)
+   
+    return phrase
+  }).reverse()
 
-  if (hund[0] === undefined) {
-    hund[0] = 'Zero'
+
+  let cleanWords = words.reduce((acc, word) => [...acc, ...word], [])
+
+  if (splitInt[0] === "0") {
+    cleanWords[0] = 'Zero'
   }
 
-  const combineValues = [...bil, ...mil, ...thou, ...hund, fraction]
+  const combineValues = [negative, ...cleanWords, fraction]
   const joinWords = combineValues.filter(space => space).join(' ')
-
+  // console.log(joinWords)
   return joinWords + ' Dollars'
 }
 
-// numberToWord(0)
-
+// numberToWord(34)
 
 module.exports = numberToWord
 
