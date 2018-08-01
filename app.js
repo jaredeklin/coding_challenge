@@ -152,7 +152,7 @@ const numberToWord = (num) => {
   let negative = ''
   const splitNumber = num.toString().split('.')
   const fraction = decimal(splitNumber[1])
-  let splitInt = [...splitNumber[0]]
+  const splitInt = [...splitNumber[0]]
   
   if(splitInt[0] === '-') {
     negative = 'Negative'
@@ -164,7 +164,7 @@ const numberToWord = (num) => {
   }
 
   let reverseDigits = splitInt.reverse().join('')
-  let numberChunks = []
+  const  numberChunks = []
  
   while(reverseDigits) {
     if (reverseDigits.length < 3) {
