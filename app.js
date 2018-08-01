@@ -152,17 +152,17 @@ const numberToWord = (num) => {
   }
 
   const fraction = decimal(splitNumber[1])
-  let chunks = []
   const digits = [...splitNumber[0]]
   let reverseDigits = digits.reverse().join('')
+  let chunks = []
   
   while(reverseDigits) {
     if (reverseDigits.length < 3) {
       chunks.push(reverseDigits)
       break;
     } else {
-      chunks.push(reverseDigits.substr(0, 3)) 
-      reverseDigits = reverseDigits.substr(3)
+      chunks.push(reverseDigits.slice(0, 3)) 
+      reverseDigits = reverseDigits.slice(3)
     }
   }
 
