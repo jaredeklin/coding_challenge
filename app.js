@@ -4,11 +4,10 @@
 * Please refer to the README.md for challenge questions and complete your challenge below.
 */
 
-
 const small = [
   '',
   'One',
-  'Two',
+  'two',
   'Three',
   'Four',
   'Five',
@@ -38,7 +37,7 @@ const medium = [
   'Sixty',
   'Seventy',
   'Eighty',
-  'Ninty'
+  'Ninety'
 ]
 
 const large = [
@@ -50,21 +49,12 @@ const large = [
 ]
 
 const decimal = (num) => {
-
+  
   if (num === undefined) {
-
     return ''
-  } else {
-    let denominator = 1;
+  } 
 
-    if (num.length) {
-      for (let i = 0; i < num.length; i++) {
-        denominator = denominator + '0'
-      }   
-    }
-
-    return `and ${num}/${parseInt(denominator)}`
-  }
+  return `and ${num}/100`
 }
 
 const getWords = (values, scale) => {
@@ -73,20 +63,15 @@ const getWords = (values, scale) => {
 
   if (values.length) {
     values.forEach((value, valueIndex) => {
- 
       let match;
 
       if (valueIndex === 0 || valueIndex === 2) {
-        match = small.find((integer, index) => {
-       
-          if (value == index) {
-            if (integer === undefined) {
-              return ''
-            } else {
-              return integer
-            }     
-          }
-        })
+
+        if (value === '0') {
+          match = undefined
+        } else {
+          match = small[value]
+        }
 
         if (valueIndex === 2) {
           if (match !== undefined) {
@@ -99,25 +84,17 @@ const getWords = (values, scale) => {
       } else {
 
         if (value < 2) {
-          const teens = values.slice(0, 2).reverse().join('')
-        
-          match = small.find((digit, digitIndex) => {
-          
-            if (teens == digitIndex) {
-              return digit
-            }
-          })
+          const teens = parseInt(values.slice(0, 2).reverse().join(''))
 
+          match = small[teens]
           wordsArray[0] = ''
 
         } else {
-
-          match = medium.find((tens, tensIndex) => {
-
-            if (value == tensIndex) {
-              return tens
-            }
-          })
+          match = medium[value]
+          
+          if (wordsArray[0] !== undefined) {
+            match = match + '-'
+          }
         }
       }
       wordsArray = [...wordsArray, match]
@@ -137,22 +114,29 @@ const getWords = (values, scale) => {
 
 const buildPhrase = (negative, words, fraction) => {
   const combineValues = [negative, ...words, fraction]
-  const joinWords = combineValues.filter(space => space).join(' ')
+  const joinWords = combineValues.filter(space => space).join(' ').toLowerCase()
+  const newWords = joinWords.replace(/- /gi, '-')
+  const toUpper = [...newWords]
+  toUpper[0] = toUpper[0].toUpperCase()
+  const rejoin = toUpper.join('')
 
-  return joinWords + ' Dollars'
+  return rejoin + ' dollars'
 }
 
 
 const numberToWord = (num) => {
 
-  if (typeof(num) !== 'number') {
+  const number = parseFloat(num)
+
+  if (isNaN(number)) {
     return 'Invalid input'
   }
 
-  let negative = ''
-  const splitNumber = num.toString().split('.')
+  const newNum = number.toFixed(2)
+  const splitNumber = newNum.toString().split('.')
   const fraction = decimal(splitNumber[1])
   const splitInt = [...splitNumber[0]]
+  let negative = ''
   
   if(splitInt[0] === '-') {
     negative = 'Negative'
@@ -164,7 +148,7 @@ const numberToWord = (num) => {
   }
 
   let reverseDigits = splitInt.reverse().join('')
-  const  numberChunks = []
+  const numberChunks = []
  
   while(reverseDigits) {
     if (reverseDigits.length < 3) {
